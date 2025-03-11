@@ -1,6 +1,6 @@
 # MOAT: Evaluating LMMs for Capability Integration and Instruction Grounding
 
-This is the official GitHub repo of our paper *MOAT: Evaluating LMMs for Capability Integration and Instruction Grounding* (INSERT ARXIV LINK HERE). All necessary data and code can be found here. Refer to our paper and website for more info.
+This is the official GitHub repo of our paper *MOAT: Evaluating LMMs for Capability Integration and Instruction Grounding* (INSERT ARXIV LINK HERE). All necessary data and code can be found here. Refer to our paper and [website](https://cambrian-yzt.github.io/MOAT/) for more info.
 
 <img src=".\figures\fig1.png" alt="fig1" style="zoom:100%;" />
 
