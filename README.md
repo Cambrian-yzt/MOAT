@@ -21,6 +21,11 @@
 
 <img src=".\figures\fig1.png" alt="fig1" style="zoom:100%;" />
 
+## News
+
+- `2025-03-13` Our MOAT is now supported by [VLMEvalKit](https://github.com/open-compass/VLMEvalKit) now! Try it out!
+- `2025-03-12` We released our MOAT on [GitHub](https://github.com/Cambrian-yzt/MOAT) and [Hugging Face](https://huggingface.co/datasets/waltsun/MOAT)!
+
 ## Overview
 
 **MOAT** (**M**ultimodal model **O**f **A**ll **T**rades) is a challenging benchmark for large multimodal models (LMMs). It consists of vision language (VL) tasks that require the LMM to integrate several VL capabilities and engage in human-like generalist visual problem solving. Moreover, many tasks in **MOAT** focus on LMMs' capability to ground complex text and visual instructions, which is crucial for the application of LMMs in-the-wild. Developing on the VL capability taxonomies proposed in previous benchmark papers, we define 10 fundamental VL capabilities in **MOAT**. 
@@ -45,15 +50,13 @@ Notably, we purposefully insulated **MOAT** from the influence of domain knowled
 
 ## Usage
 
-**Quickstart**
+We provide **three** ways to evaluate your LMM on **MOAT**.
 
-* Dependencies are listed in `./requirements.txt`. We used `Python 3.12.8` in our experiments. Run `pip install -r requirements.txt` to install all dependencies. 
+### With VLMEvalKit
 
-* The dataset is available on [Hugging Face](https://huggingface.co/datasets/waltsun/MOAT). Our code will automatically download the dataset from Hugging Face.
+**VLMEvalKit** is a toolkit for evaluating large multimodal models (LMMs) on various visual language (VL) benchmarks. It provides a unified interface for evaluating LMMs on different VL benchmarks, including **MOAT**. Please refer to the [VLMEvalKit](https://github.com/open-compass/VLMEvalKit) repository for more information.
 
-* To evaluate an LMM, run `python main.py`, and the results will be logged under `./logs/`. Change the model name, API endpoint, and API key in `./configs/constants.py`.
-
-**Run Your Own Evaluation**
+### Develop Your Own Code With Hugging Face Datasets
 
 You can access our dataset with the following code:
 
@@ -64,7 +67,17 @@ dataset = load_dataset("waltsun/MOAT", split='test')
 
 As some questions are formatted as interleaved text and image(s), we recommend referring to the `./inference/eval_API.py` file for the correct way to query the LMM.
 
-**File Structure**
+### Use Our GitHub Repository
+
+* Dependencies are listed in `./requirements.txt`. We used `Python 3.12.8` in our experiments. Run `pip install -r requirements.txt` to install all dependencies. 
+
+* The dataset is available on [Hugging Face](https://huggingface.co/datasets/waltsun/MOAT). Our code will automatically download the dataset from Hugging Face.
+
+* To evaluate an LMM, run `python main.py`, and the results will be logged under `./logs/`. Change the model name, API endpoint, and API key in `./configs/constants.py`.
+
+## Details
+
+**File Structure in GitHub Repo**
 
 * `./config/constants.py`: You can tweak the experiment settings here.
 * `./config/prompts.py`: You can find the VQA prompt (both the CoT version and the non-CoT version) and the evaluation prompt.
@@ -73,7 +86,7 @@ As some questions are formatted as interleaved text and image(s), we recommend r
 * `./main.py`: The script in `main.py` loops over all questions and uses multithreading to speed up the evaluation process. Logging is taken care of in `main.py` as well.
 * `./analyze.py`: Used to generate the leaderboard based on the logs. The leaderboard can be found under the directory `./analytics/`.
 
-**Column Description**
+**Column Description in Hugging Face Dataset**
 
 - `index`: The index of the question in the dataset.
 - `question`: The question text.
