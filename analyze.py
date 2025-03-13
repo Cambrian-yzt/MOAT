@@ -3,6 +3,7 @@
 """
 import os
 import json
+from datasets import load_dataset, Dataset
 from collections import defaultdict
 import pandas
 from matplotlib import pyplot as plt
@@ -28,7 +29,7 @@ def print_leaderboard():
     for item in leaderboard:
         print(f'Accuracy for {item[1]}:' + ' ' * (40 - len(item[1])) + f'{item[0]:.4f}')
 
-def get_accuracy_by_capability_type():
+def get_accuracy_by_capability_type(dataset: Dataset):
     # produce a list of model names sorted by overall accuracy
     leaderboard_raw = defaultdict(list)
     for log_name in os.listdir(LOG_DIR):
@@ -62,8 +63,8 @@ def get_accuracy_by_capability_type():
                 continue
             with open(os.path.join(LOG_DIR, log_name), mode='r', encoding='utf-8') as f:
                 result_dict: dict = json.load(f)
-            for question_id, result in result_dict['logs'].items():
-                for capability in QUESTIONS[question_id]['capability']:
+            for result in result_dict['logs']:
+                for capability in dataset[result['index']]['capability']:
                     scoreboard_raw[capability].append(result['verdict'])
             scoreboard_raw['overall'].append(result_dict['summary']['Accuracy'])
         df_raw['model'].append(model)
@@ -73,7 +74,7 @@ def get_accuracy_by_capability_type():
         df = pandas.DataFrame(df_raw)
         df.to_csv(os.path.join(ANALYTICS_DIR, 'acc_by_capability.csv'))
 
-def get_accuracy_by_capability_integration():
+def get_accuracy_by_capability_integration(dataset: Dataset):
     # produce a list of model names sorted by overall accuracy
     leaderboard_raw = defaultdict(list)
     for log_name in os.listdir(LOG_DIR):
@@ -93,7 +94,7 @@ def get_accuracy_by_capability_integration():
     df_raw = {
         'model': []
     }
-    for _, question in QUESTIONS.items():
+    for question in dataset:
         df_raw['+'.join(question['capability'])] = []
     df_raw['overall'] = []
 
@@ -107,8 +108,8 @@ def get_accuracy_by_capability_integration():
                 continue
             with open(os.path.join(LOG_DIR, log_name), mode='r', encoding='utf-8') as f:
                 result_dict: dict = json.load(f)
-            for question_id, result in result_dict['logs'].items():
-                scoreboard_raw['+'.join(QUESTIONS[question_id]['capability'])].append(result['verdict'])
+            for result in result_dict['logs']:
+                scoreboard_raw['+'.join(dataset[result['index']]['capability'])].append(result['verdict'])
             scoreboard_raw['overall'].append(result_dict['summary']['Accuracy'])
         df_raw['model'].append(model)
         for capability_list in df_raw.keys() - {'model'}:
@@ -121,5 +122,6 @@ def get_accuracy_by_capability_integration():
 if __name__ == '__main__':
     if not os.path.exists(ANALYTICS_DIR):
         os.makedirs(ANALYTICS_DIR)
+    dataset = load_dataset("waltsun/MOAT", split='test')
     print_leaderboard()
-    get_accuracy_by_capability_type()
+    get_accuracy_by_capability_type(dataset)

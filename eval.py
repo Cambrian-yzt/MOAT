@@ -1,5 +1,6 @@
 from openai import OpenAI
 from time import perf_counter
+from PIL.Image import Image
 
 from configs.constants import *
 from configs.prompts import *
@@ -47,46 +48,47 @@ def eval_answer(input: str, ground_truth: str, max_tokens=4096, max_tries=5) -> 
     return int(response_json['verdict'])
 
 
-def eval_vqa_item(question_id: str, max_tries=5) -> tuple[str, str, str, str, int, float]:
+def eval_vqa_item(question_dict: dict, max_tries=5) -> tuple[str, str, str, str, int, float]:
     """
-        Takes in a quesion ID (see dataset/questions.py). 
+        Evaluate one VQA item
     """
     start_time = perf_counter()
     try:
-        question = QUESTIONS[question_id]
-        query_image_names = question['image_names']
-        question_text = question['question']
-        outside_knowledge_text = question['outside_knowledge_text']
-        outside_knowledge_image_names = question['outside_knowledge_image_names']
-        choices = question['choices']
-        ground_truth = question['answer']
+        question_index: int = question_dict['index']
+        question_text: str = question_dict['question']
+        choices: list[str] = question_dict['choices']
+        images: list[Image] = question_dict['images']
+        outside_knowledge_text: str = question_dict['outside_knowledge_text']
+        outside_knowledge_images: list[Image] = question_dict['outside_knowledge_images']
+        ground_truth: str = question_dict['answer']
     except Exception as e:
-        print(f"Failed to extract question data for question {question_id}: {e}")
+        print(f"Failed to extract question data for question {question_dict}: {e}")
         raise
     
     try:
         # use the API
-        answer, reason = get_response_API(question_text, query_image_names, outside_knowledge_text, outside_knowledge_image_names, choices, max_tries=max_tries, max_tokens=MAX_TOKENS)
+        answer, reason = get_response_API(question_text, images, outside_knowledge_text, outside_knowledge_images, choices, max_tries=max_tries, max_tokens=MAX_TOKENS)
     except Exception as e:
-        print(f"Failed to get a valid answer for question {question_id}: {e}")
+        print(f"Failed to get a valid answer for question {question_index}: {e}")
         raise
     
     try:
         verdict = eval_answer(answer, ground_truth)
     except Exception as e:
-        print(f"Failed to get a valid verdict for the answer to question {question_id}: {e}")
+        print(f"Failed to get a valid verdict for the answer to question {question_index}: {e}")
         verdict = 0
         # raise
     
     end_time = perf_counter()
-    return question_id, answer, reason, ground_truth, verdict, end_time - start_time
+    return question_index, answer, reason, ground_truth, verdict, end_time - start_time
 
 
 if __name__ == '__main__':
-    question_id = '10_11'
-    question_id, answer, reason, ground_truth, verdict, time_delta = eval_vqa_item(question_id)
+    from datasets import load_dataset, Dataset
+    dataset = load_dataset("waltsun/MOAT", split='test')
+    index, answer, reason, ground_truth, verdict, time_delta = eval_vqa_item(dataset[0])
     print(f"Model: {VQA_MODEL}")
-    print(f"Question ID: {question_id}. Time taken: {time_delta:.2f} seconds.")
+    print(f"Question Index: {index}. Time taken: {time_delta:.2f} seconds.")
     print(f"Answer: {answer}")
     print(f"Reason: {reason}")
     print(f"Ground truth: {ground_truth}")

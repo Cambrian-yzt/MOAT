@@ -1,8 +1,10 @@
 import time
 import random
 from openai import OpenAI
+from PIL.Image import Image
 
 import base64
+from io import BytesIO
 import os
 from random import shuffle
 
@@ -10,19 +12,21 @@ from configs.constants import *
 from configs.prompts import *
 
 
-def get_response_API(query_text: str, query_image_paths: list[str], outside_knowledge_text: str, outside_knowledge_image_paths: list[str], choices: list[str], max_tokens=4096, max_tries=5) -> tuple[str, str]:
+def get_response_API(question: str, images: list[Image], outside_knowledge_text: str, outside_knowledge_images: list[Image], choices: list[str], max_tokens=4096, max_tries=5) -> tuple[str, str]:
     """
         Exactly what it says in the names of the function and parameters
     """
     # read the image files and convert them to base64
-    base64_query_images: list[tuple[str, str]] = []  # a list of tuples with this format: ('BASE64STRING', 'png') or ('BASE64STRING', 'jpg')
-    base64_outside_knowledge_images: list[tuple[str, str]] = []
-    for query_image_path in query_image_paths:
-        with open(os.path.join('dataset', query_image_path), 'rb') as img:
-            base64_query_images.append((base64.b64encode(img.read()).decode('utf-8'), query_image_path.split('.')[-1]))
-    for outside_knowledge_image_path in outside_knowledge_image_paths:
-        with open(os.path.join('dataset', outside_knowledge_image_path), 'rb') as img:
-            base64_outside_knowledge_images.append((base64.b64encode(img.read()).decode('utf-8'), outside_knowledge_image_path.split('.')[-1]))
+    base64_images: list[str] = []
+    base64_outside_knowledge_images: list[str] = []
+    for img in images:
+        buffered = BytesIO()
+        img.save(buffered, format="PNG")
+        base64_images.append(base64.b64encode(buffered.getvalue()).decode('utf-8'))
+    for img in outside_knowledge_images:
+        buffered = BytesIO()
+        img.save(buffered, format="PNG")
+        base64_outside_knowledge_images.append(base64.b64encode(buffered.getvalue()).decode('utf-8'))
 
     # build a query context
     messages = [
@@ -38,14 +42,14 @@ def get_response_API(query_text: str, query_image_paths: list[str], outside_know
     ]
     if len(choices) > 0:
         shuffle(choices)
-        query_text += f'\nThe choices are: {choices}'
+        question += f'\nThe choices are: {choices}'
     user_message_contents = [
         {
             'type': 'text',
-            'text': query_text,
+            'text': question,   # may with choices
         }
     ]
-    for idx, (img, img_format) in enumerate(base64_query_images):
+    for idx, img in enumerate(base64_images):
         user_message_contents.append({
             'type': 'text',
             'text': f'Image {idx + 1}',
@@ -53,7 +57,7 @@ def get_response_API(query_text: str, query_image_paths: list[str], outside_know
         user_message_contents.append({
             'type': 'image_url',
             'image_url': {
-                'url': f'data:image/{img_format};base64,{img}',
+                'url': f'data:image/png;base64,{img}',
                 'detail': VQA_API_VISION_DETAIL_LEVEL,
             }
         })
@@ -62,7 +66,7 @@ def get_response_API(query_text: str, query_image_paths: list[str], outside_know
             'type': 'text',
             'text': 'Hint:\n' + outside_knowledge_text,
         })
-    for idx, (img, img_format) in enumerate(base64_outside_knowledge_images):
+    for idx, img in enumerate(base64_outside_knowledge_images):
         user_message_contents.append({
             'type': 'text',
             'text': f'Hint image {idx}',
@@ -70,7 +74,7 @@ def get_response_API(query_text: str, query_image_paths: list[str], outside_know
         user_message_contents.append({
             'type': 'image_url',
             'image_url': {
-                'url': f'data:image/{img_format};base64,{img}',
+                'url': f'data:image/png;base64,{img}',
                 'detail': VQA_API_VISION_DETAIL_LEVEL,
             }
         })
@@ -125,7 +129,7 @@ def get_response_API(query_text: str, query_image_paths: list[str], outside_know
             time.sleep(0.5)
             break
         except Exception as e:
-            print(query_image_paths, e)
+            print(images, e)
             answer = 'RESPONSE FAILED'
             reason = 'NO REASON'
             time.sleep(5 * (i + random.random()))

@@ -118,5 +118,7 @@ Thumbs.db
 *.mo
 
 **/*.log
+logs/
+analytics/
 
 test*.py
