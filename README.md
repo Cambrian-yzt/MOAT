@@ -33,9 +33,9 @@ Notably, we purposefully insulated **MOAT** from the influence of domain knowled
 
 **MOAT** tasks require LMMs to integrate up to 6 fundamental VL capabilities. We report the proportion of questions requiring each VL capability, the distribution of the number of VL capabilities required, and the 15 most common capability combinations required in **MOAT**.
 
-<img src=".\figures\fig3a.png" alt="fig3a" style="zoom:50%;" /><img src=".\figures\fig3b.png" alt="fig3b" style="zoom:50%;" />
+<img src=".\figures\fig3.png" alt="fig3b" style="zoom:100%;" />
 
-<img src=".\figures\fig3c.png" alt="fig3c" style="zoom:70%;" />
+
 
 ## Leaderboard
 
