@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOAT: Evaluating LMMs for Capability Integration and Instruction Grounding</title>
+</head>
+<body style="margin: 0 auto; max-width: 800px; font-family: Arial, sans-serif; padding: 20px; line-height:1.6;">
+    
+    <h1>MOAT: Evaluating LMMs for Capability Integration and Instruction Grounding</h1>
+    <p>
+        This is the official GitHub repo of our paper <em>MOAT: Evaluating LMMs for Capability Integration and Instruction Grounding</em> (INSERT ARXIV LINK HERE). All necessary data and code can be found here. Refer to our paper and website for more info.
+    </p>
+
+    <img src="./figures/fig1.png" alt="fig1" style="width:100%;"/>
+
+    <h2>Overview</h2>
+    <p>
+        <strong>MOAT</strong> (<strong>M</strong>ultimodal model <strong>O</strong>f <strong>A</strong>ll <strong>T</strong>rades) is a challenging benchmark for large multimodal models (LMMs). It consists of vision language (VL) tasks that require the LMM to integrate several VL capabilities and engage in human-like generalist visual problem solving. Moreover, many tasks in <strong>MOAT</strong> focus on LMMs' capability to ground complex text and visual instructions, which is crucial for the application of LMMs in-the-wild. Developing on the VL capability taxonomies proposed in previous benchmark papers, we define 10 fundamental VL capabilities in <strong>MOAT</strong>.
+    </p>
+
+    <img src="./figures/fig2.png" alt="fig2" style="width:100%;"/>
+
+    <p>
+        Notably, we purposefully insulated <strong>MOAT</strong> from the influence of domain knowledge, text generation style, and other external factors by making the questions close-ended (i.e. have a single short answer) and solvable with the information and hints provided in the question itself. This allows <strong>MOAT</strong> to focus on fundamental generalist VL capabilities. We also did not include VL capabilities like <em>general object recognition</em> and <em>attribute recognition</em> in our taxonomy, since these are required by all <strong>MOAT</strong> tasks, and performance on these fronts can be reflected in the overall accuracy on <strong>MOAT</strong>.
+    </p>
+
+    <h2>Benchmark Composition</h2>
+    <p>
+        <strong>MOAT</strong> tasks require LMMs to integrate up to 6 fundamental VL capabilities. We report the proportion of questions requiring each VL capability, the distribution of the number of VL capabilities required, and the 15 most common capability combinations required in <strong>MOAT</strong>.
+    </p>
+
+    <img src="./figures/fig3a.png" alt="fig3a" style="width:49%;"/>
+    <img src="./figures/fig3b.png" alt="fig3b" style="width:49%;"/>
+    <img src="./figures/fig3c.png" alt="fig3c" style="width:70%; display:block; margin:10px auto;"/>
+
+    <h2>Leaderboard</h2>
+    <p>
+        <strong>ALL</strong> existing LMMs, proprietary and open source, perform very poorly on <strong>MOAT</strong>, with the best performing model (OpenAI o1) achieving an accuracy (38.8%) less than half of that achieved by humans (82.7%). For individual VL capabilities, <strong>CNT</strong>, <strong>RLA</strong>, <strong>3DTF</strong> and <strong>3DQNT</strong> saw consistent poor performance by LMMs. In addition, <strong>GNDT</strong> and <strong>GNDV</strong> performance did not scale well with model size. Please refer to our paper for more detailed analysis of the results, as well as discussion on the implication of LMM architecture choices such as tiling and built-in CoT reasoning (or '<em>thinking</em>') capability.
+    </p>
+
+    <img src="./figures/fig4.png" alt="fig4" style="width:100%;"/>
+
+    <h2>Data and Code</h2>
+    <h3>Quickstart</h3>
+    <ul>
+        <li>Dependencies: listed in <code>./requirements.txt</code>. Run <code>pip install -r requirements.txt</code>.</li>
+        <li>Questions: <code>./dataset/questions.json</code>; Images: folders under <code>./dataset/</code>.</li>
+        <li>Run evaluation: <code>python main.py</code>, results logged under <code>./logs/</code>. Configure in <code>./configs/constants.py</code>.</li>
+    </ul>
+
+    <h3>Detailed Explanation</h3>
+    <ul>
+        <li><code>./config/constants.py</code>: Experiment settings.</li>
+        <li><code>./config/prompts.py</code>: Prompts for VQA and evaluation.</li>
+        <li><code>./dataset/</code>: Data folder.</li>
+        <li><code>./inference/eval_API.py</code>: QA query and API handling.</li>
+        <li><code>./eval.py</code>: Question evaluation.</li>
+        <li><code>./main.py</code>: Main evaluation script.</li>
+        <li><code>./analyze.py</code>: Leaderboard generator (under <code>./analytics/</code>).</li>
+    </ul>
+
+    <h2>Future Work</h2>
+    <p>
+        We intend to further increase the diversity of the tasks in <strong>MOAT</strong>, involving more capability combinations and encompassing more domains and scenarios. Stay tuned!
+    </p>
+</body>
+</html>
