@@ -1,6 +1,23 @@
-# MOAT: Evaluating LMMs for Capability Integration and Instruction Grounding
+<h1>MOAT: Evaluating LMMs for Capability Integration and Instruction Grounding</h1>
 
-This is the official GitHub repo of our paper *MOAT: Evaluating LMMs for Capability Integration and Instruction Grounding* (INSERT ARXIV LINK HERE). All necessary data and code can be found here. Refer to our paper and [website](https://cambrian-yzt.github.io/MOAT/) for more info.
+<div align="center">
+    Zhoutong Ye, Mingze Sun, Huan-ang Gao, Chun Yu, Yuanchun Shi
+</div>
+
+<div align="center">
+<a href="https://arxiv.org/abs/2503.09348" target="_blank">
+    <img alt="arXiv" src="https://img.shields.io/badge/arXiv-MOAT-red?logo=arxiv" height="20" />
+</a>
+<a href="https://cambrian-yzt.github.io/MOAT/" target="_blank">
+    <img alt="Website" src="https://img.shields.io/badge/🌎_Website-MOAT-blue.svg" height="20" />
+</a>
+<a href="https://huggingface.co/datasets/waltsun/MOAT" target="_blank">
+    <img alt="HF Dataset: MOAT" src="https://img.shields.io/badge/%F0%9F%A4%97%20_HuggingFace-MOAT-yellow" height="20" />
+</a>
+<a href="https://github.com/Cambrian-yzt/MOAT" target="_blank">
+    <img alt="GitHub: MOAT" src="https://img.shields.io/badge/GitHub-MOAT-yellow?logo=github" height="20" />
+</a>
+</div>
 
 <img src=".\figures\fig1.png" alt="fig1" style="zoom:100%;" />
 
@@ -26,25 +43,47 @@ Notably, we purposefully insulated **MOAT** from the influence of domain knowled
 
 <img src=".\figures\fig4.png" alt="fig4" style="zoom:100%;" />
 
-## Data and Code
+## Usage
 
 **Quickstart**
 
 * Dependencies are listed in `./requirements.txt`. We used `Python 3.12.8` in our experiments. Run `pip install -r requirements.txt` to install all dependencies. 
 
-* The questions can be found in `./dataset/questions.json`. The images can be found in the various directories under `./dataset/`.
+* The dataset is available on [Hugging Face](https://huggingface.co/datasets/waltsun/MOAT). Our code will automatically download the dataset from Hugging Face.
 
 * To evaluate an LMM, run `python main.py`, and the results will be logged under `./logs/`. Change the model name, API endpoint, and API key in `./configs/constants.py`.
 
-**Detailed Explanation**
+**Run Your Own Evaluation**
+
+You can access our dataset with the following code:
+
+```python
+from datasets import load_dataset
+dataset = load_dataset("waltsun/MOAT", split='test')
+```
+
+As some questions are formatted as interleaved text and image(s), we recommend referring to the `./inference/eval_API.py` file for the correct way to query the LMM.
+
+**File Structure**
 
 * `./config/constants.py`: You can tweak the experiment settings here.
 * `./config/prompts.py`: You can find the VQA prompt (both the CoT version and the non-CoT version) and the evaluation prompt.
-* `./dataset/`: The questions are in `./dataset/questions.json`, while the images are in the various folders here.
 * `./inference/eval_API.py`: The QA process, including how the LMM query context is structured and details about API calls, is defined in this file.
 * `./eval.py`: The evaluation process for each question, including the QA phase and the answer evaluation phase.
 * `./main.py`: The script in `main.py` loops over all questions and uses multithreading to speed up the evaluation process. Logging is taken care of in `main.py` as well.
 * `./analyze.py`: Used to generate the leaderboard based on the logs. The leaderboard can be found under the directory `./analytics/`.
+
+**Column Description**
+
+- `index`: The index of the question in the dataset.
+- `question`: The question text.
+- `choices`: A list of the answer choices. Can be empty.
+- `images`: The list of PIL images.
+- `outside_knowledge_text`: The essential information for answering the question. Optional.
+- `outside_knowledge_images`: The list of PIL images that are essential for answering the question. Can be empty.
+- `answer`: The correct answer.
+- `capability`: The VL capabilities required to answer the question. A list of strings.
+- `human_cot`: The human annotation for the CoT reasoning process.
 
 ## Future Work
 
