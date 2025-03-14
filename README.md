@@ -23,8 +23,8 @@
 
 ## News
 
-- `2025-03-13` Our MOAT is now supported by [VLMEvalKit](https://github.com/open-compass/VLMEvalKit) now! Try it out!
-- `2025-03-12` We released our MOAT on [GitHub](https://github.com/Cambrian-yzt/MOAT) and [Hugging Face](https://huggingface.co/datasets/waltsun/MOAT)!
+- `2025-03-13` MOAT is now supported by [VLMEvalKit](https://github.com/open-compass/VLMEvalKit) now! Try it out!
+- `2025-03-12` We released MOAT on [GitHub](https://github.com/Cambrian-yzt/MOAT) and [Hugging Face](https://huggingface.co/datasets/waltsun/MOAT)!
 
 ## Overview
 
