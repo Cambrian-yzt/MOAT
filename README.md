@@ -101,3 +101,17 @@ As some questions are formatted as interleaved text and image(s), we recommend r
 ## Future Work
 
 Going forward, we intend to further increase the diversity of the tasks in **MOAT**, involving more capability combinations and encompassing more domains and scenarios. Stay tuned!
+
+## Citation
+
+Cite our work using the BibTex code below!
+
+```latex
+@article{ye2025moat,
+  title={MOAT: Evaluating LMMs for Capability Integration and Instruction Grounding},
+  author={Ye, Zhoutong and Sun, Mingze and Gao, Huan-ang and Yu, Chun and Shi, Yuanchun},
+  journal={arXiv preprint arXiv:2503.09348},
+  year={2025}
+}
+```
+

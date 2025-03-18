@@ -11,7 +11,7 @@ from matplotlib import pyplot as plt
 from configs.constants import *
 
 
-CAPABILITIES = ['CNT', 'OCR', 'RLA', '3DTF', '3DQNT', 'GNDT', 'GNDV', 'UCV', 'RET', 'MTIMG', 'MTLIN']
+CAPABILITIES = ['CNT', 'OCR', 'UCV', 'RLA', '3DTF', '3DQNT', 'GNDT', 'GNDV', 'RET', 'MTIMG', 'MTLIN']
 
 def print_leaderboard():
     leaderboard_raw = defaultdict(list)
