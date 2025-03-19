@@ -23,7 +23,8 @@
 
 ## News
 
-- `2025-03-13` MOAT is now supported by [VLMEvalKit](https://github.com/open-compass/VLMEvalKit) now! Try it out!
+- `2025-03-19` Added results for GPT 4.5, see the table below for details.
+- `2025-03-13` MOAT is now supported by [VLMEvalKit](https://github.com/open-compass/VLMEvalKit)! Try it out!
 - `2025-03-12` We released MOAT on [GitHub](https://github.com/Cambrian-yzt/MOAT) and [Hugging Face](https://huggingface.co/datasets/waltsun/MOAT)!
 
 ## Overview
