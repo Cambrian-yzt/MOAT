@@ -23,6 +23,7 @@
 
 ## News
 
+- `2025-03-26` Added results for Gemini 2.5 Pro, which overtook OpenAI o1 as the best performing model on MOAT. However, there is still a long way to go before LMMs reach human-like performance on MOAT!
 - `2025-03-19` Added results for GPT 4.5, see the table below for details.
 - `2025-03-13` MOAT is now supported by [VLMEvalKit](https://github.com/open-compass/VLMEvalKit)! Try it out!
 - `2025-03-12` We released MOAT on [GitHub](https://github.com/Cambrian-yzt/MOAT) and [Hugging Face](https://huggingface.co/datasets/waltsun/MOAT)!
