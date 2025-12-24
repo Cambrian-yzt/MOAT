@@ -9,16 +9,7 @@ VQA_SYSTEM_PROMPT = json.dumps({
     ]
 })
 
-# w/o cot
-# VQA_SYSTEM_PROMPT = json.dumps({
-#     'task': 'Answer the question presented to you truthfully.',
-#     'requirements': [
-#         'If you are given a list of possible answers, you must choose from it.',
-#         'You must answer in the following json format: {"answer": "(your answer)"}'
-#     ]
-# })
-
-EVAL_SYSTEM_PROMPT = json.dumps({
+JUDGE_SYSTEM_PROMPT = json.dumps({
     'task': 'Evaluate whether the answer to a question is correct.',
     'requirements': [
         'Compare an answer to a question with the ground truth answer. Determine whether it is correct.',

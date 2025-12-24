@@ -13,7 +13,7 @@ if __name__ == '__main__':
         print(f'VQA Model: {VQA_MODEL}')
         print(f'Temperature: {VQA_TEMPERATURE}')
         print(f'Max Concurrent Requests: {MAX_CONCURRENT_REQUESTS}')
-        print(f'Eval Model: {EVAL_MODEL}')
+        print(f'Eval Model: {JUDGE_MODEL}')
 
         launch_time = datetime.now()
         dataset = load_dataset("waltsun/MOAT", split='test')
@@ -25,14 +25,17 @@ if __name__ == '__main__':
             
             pbar = tqdm(total=len(dataset), dynamic_ncols=True)
             for future in as_completed(futures):
-                index, answer, reason, ground_truth, verdict, time_delta = future.result()
+                index, answer, reason, ground_truth, verdict, time_delta, prompt_tokens, completion_tokens = future.result()
                 n_correct += verdict
                 result_dict[index] = {
                     'index': index,
                     'answer': answer,
                     'reason': reason,
                     'ground_truth': ground_truth,
-                    'verdict': verdict
+                    'verdict': verdict,
+                    'time': time_delta,
+                    'prompt_tokens': prompt_tokens,
+                    'completion_tokens': completion_tokens
                 }
                 pbar.update(1)
         if not os.path.exists(LOG_DIR):
@@ -47,7 +50,7 @@ if __name__ == '__main__':
                     'VQA Model': VQA_MODEL,
                     'Run ID': run_id,
                     'Temperature': VQA_TEMPERATURE,
-                    'Eval Model': EVAL_MODEL,
+                    'Eval Model': JUDGE_MODEL,
                 },
                 'logs': result_list,
             }, f, indent=4)

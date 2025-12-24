@@ -1,4 +1,5 @@
 import time
+from time import perf_counter
 import random
 from openai import OpenAI
 from PIL.Image import Image
@@ -31,13 +32,13 @@ def get_response_API(question: str, images: list[Image], outside_knowledge_text:
     # build a query context
     messages = [
         {
-            'role': 'system' if 'o1' not in VQA_MODEL else 'developer',
+            'role': 'system',
             'content': [
                 {
                     'type': 'text',
                     'text': VQA_SYSTEM_PROMPT,
                 }
-            ] if 'doubao' not in VQA_MODEL and 'moonshot' not in VQA_MODEL else VQA_SYSTEM_PROMPT  # Doubao only accepts a simple string as system prompt, which is strange :(
+            ]
         },
     ]
     if len(choices) > 0:
@@ -57,7 +58,7 @@ def get_response_API(question: str, images: list[Image], outside_knowledge_text:
         user_message_contents.append({
             'type': 'image_url',
             'image_url': {
-                'url': f'data:image/png;base64,{img}',
+                'url': f'data:image/jpg;base64,{img}',
                 'detail': VQA_API_VISION_DETAIL_LEVEL,
             }
         })
@@ -74,7 +75,7 @@ def get_response_API(question: str, images: list[Image], outside_knowledge_text:
         user_message_contents.append({
             'type': 'image_url',
             'image_url': {
-                'url': f'data:image/png;base64,{img}',
+                'url': f'data:image/jpg;base64,{img}',
                 'detail': VQA_API_VISION_DETAIL_LEVEL,
             }
         })
@@ -88,49 +89,39 @@ def get_response_API(question: str, images: list[Image], outside_knowledge_text:
     
     for i in range(max_tries):
         try:
-            if 'o1' in VQA_MODEL:
-                completion = client.chat.completions.create(
-                    model=VQA_MODEL,
-                    temperature=1,
-                    max_completion_tokens=16384,
-                    messages=messages,
-                    timeout=API_TIMEOUT
-                )
-            else:
-                completion = client.chat.completions.create(
-                    model=VQA_MODEL,
-                    temperature=VQA_TEMPERATURE,
-                    max_tokens=max_tokens,
-                    messages=messages,
-                    response_format={'type': 'json_object'},
-                    timeout=API_TIMEOUT
-                )
-            if JSON_OUTPUT:
-                raw_response = completion.model_dump()['choices'][0]['message']['content']
-                try: 
-                    if '```json' in raw_response:
-                        raw_response = raw_response[7: -3]
-                    response_json: dict = json.loads(raw_response)
-                    # weird gemini stuff
-                    if VQA_MODEL == 'gemini-2.0-pro-exp-02-05' or VQA_MODEL == 'gemini-2.0-flash-lite-preview-02-05':
-                        try:
-                            response_json = response_json[0]
-                        except Exception as e:
-                            pass
-                    answer = response_json['answer']
-                    reason = response_json.get('analysis', 'NO REASON')
-                except Exception as e:
-                    # json decoding failed, treat as non-json output
-                    answer = raw_response
-                    reason = 'NO REASON'
-            else:
-                answer = completion.model_dump()['choices'][0]['message']['content']
-                reason = 'NO REASON'
-            time.sleep(0.5)
+            start_time = perf_counter()
+            completion = client.chat.completions.create(
+                model=VQA_MODEL,
+                temperature=VQA_TEMPERATURE,
+                max_tokens=MAX_TOKENS,
+                messages=messages,
+                response_format={'type': 'json_object'},
+                timeout=API_TIMEOUT
+            )
+            end_time = perf_counter()
+            completion = completion.model_dump()
+            raw_response = completion['choices'][0]['message']['content']
+            prompt_tokens = completion['usage']['prompt_tokens']
+            completion_tokens = completion['usage']['completion_tokens']
+            try:
+                if '```json' in raw_response:
+                    raw_response = raw_response[7: -3]
+                response_json: dict = json.loads(raw_response)
+                answer = response_json['answer']
+                reason = response_json.get('analysis', 'NO REASON')
+            except Exception as e:
+                answer= raw_response
+                reason = 'N/A'
             break
         except Exception as e:
             print(images, e)
             answer = 'RESPONSE FAILED'
             reason = 'NO REASON'
-            time.sleep(5 * (i + random.random()))
-    return answer, reason
+            prompt_tokens = 0
+            completion_tokens = 0
+    try:
+        time_delta = end_time - start_time
+    except Exception as e:
+        time_delta = -1
+
+    return answer, reason, time_delta, prompt_tokens, completion_tokens
