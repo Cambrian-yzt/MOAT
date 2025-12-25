@@ -41,7 +41,7 @@
 
     <h2>Overview</h2>
     <p>
-        <strong>MOAT</strong> (<strong>M</strong>ultimodal model <strong>O</strong>f <strong>A</strong>ll <strong>T</strong>rades) is a challenging benchmark for large multimodal models (LMMs). It consists of vision language (VL) tasks that require the LMM to integrate several VL capabilities and engage in human-like generalist visual problem solving. Moreover, many tasks in <strong>MOAT</strong> focus on LMMs' capability to ground complex text and visual instructions, which is crucial for the application of LMMs in-the-wild. Developing on the VL capability taxonomies proposed in previous benchmark papers, we define 10 fundamental VL capabilities in <strong>MOAT</strong>.
+        <strong>MOAT</strong> (<strong>M</strong>ultimodal model <strong>O</strong>f <strong>A</strong>ll <strong>T</strong>rades) is a challenging benchmark for large multimodal models (LMMs). It consists of vision language (VL) tasks that require the LMM to integrate several VL capabilities and engage in human-like generalist visual problem solving. Moreover, many tasks in <strong>MOAT</strong> focus on LMMs' capability to ground complex text and visual instructions, which is crucial for the application of LMMs in-the-wild. Developing on the VL capability taxonomies proposed in previous benchmark papers, we define 9 fundamental VL capabilities in <strong>MOAT</strong>.
     </p>
 
     <img src="./figures/fig2.png" alt="fig2" style="width:100%;"/>
@@ -59,7 +59,7 @@
 
     <h2>Leaderboard</h2>
     <p>
-        <strong>ALL</strong> existing LMMs, proprietary and open source, perform very poorly on <strong>MOAT</strong>, with the best performing model (OpenAI o1) achieving an accuracy (38.8%) less than half of that achieved by humans (82.7%). For individual VL capabilities, <strong>CNT</strong>, <strong>RLA</strong>, <strong>3DTF</strong> and <strong>3DQNT</strong> saw consistent poor performance by LMMs. In addition, <strong>GNDT</strong> and <strong>GNDV</strong> performance did not scale well with model size. Please refer to our paper for more detailed analysis of the results, as well as discussion on the implication of LMM architecture choices such as tiling and built-in CoT reasoning (or '<em>thinking</em>') capability.
+        <strong>ALL</strong> existing LMMs, proprietary and open source, perform very poorly on <strong>MOAT</strong>, with the best performing model (Gemini 2.5 Pro) achieving an accuracy (44.0%) about half of that achieved by humans (82.7%) on a 189-question subset with a similar capability distribution. For individual VL capabilities, <strong>CNT</strong> and <strong>RLA</strong> saw consistent poor performance by LMMs. In addition, <strong>GNDT</strong> performance did not scale well with model size. Please refer to our paper for more detailed analysis of the results, as well as discussion on the implication of LMM architecture choices such as tiling and built-in CoT reasoning (or '<em>thinking</em>') capability.
     </p>
 
     <img src="./figures/fig4.png" alt="fig4" style="width:100%;"/>
