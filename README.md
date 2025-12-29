@@ -93,12 +93,12 @@ As some questions are formatted as interleaved text and image(s), we recommend r
 - `index`: The index of the question in the dataset.
 - `question`: The question text.
 - `choices`: A list of the answer choices. Can be empty.
-- `images`: The list of PIL images.
-- `outside_knowledge_text`: The essential information for answering the question. Optional.
-- `outside_knowledge_images`: The list of PIL images that are essential for answering the question. Can be empty.
-- `answer`: The correct answer.
+- `task_images`: The list of PIL images.
+- `external_knowledge`: The essential information for answering the question. Could be empty (no external knowledge needed to answer the question).
+- `external_knowledge_images`: The list of PIL images that are essential for answering the question. Could be empty.
+- `ground_truth`: The correct answer.
 - `capability`: The VL capabilities required to answer the question. A list of strings.
-- `human_cot`: The human annotation for the CoT reasoning process.
+- `answer_format`: The format of the question, could be "multiple choices" or "short answer".
 
 ## Future Work
 
@@ -111,7 +111,7 @@ Cite our work using the BibTex code below!
 ```latex
 @article{ye2025moat,
   title={MOAT: Evaluating LMMs for Capability Integration and Instruction Grounding},
-  author={Ye, Zhoutong and Sun, Mingze and Gao, Huan-ang and Yu, Chun and Shi, Yuanchun},
+  author={Zhoutong Ye and Mingze Sun and Huan-ang Gao and Xutong Wang and Xiangyang Wang and Yu Mei and Chang Liu and Qinwei Li and Chengwen Zhang and Qinghuan Lan and Chun Yu and Yuanchun Shi},
   journal={arXiv preprint arXiv:2503.09348},
   year={2025}
 }
