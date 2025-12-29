@@ -1,7 +1,11 @@
 <h1>MOAT: Evaluating LMMs for Capability Integration and Instruction Grounding</h1>
 
 <div align="center">
-    Zhoutong Ye, Mingze Sun, Huan-ang Gao, Chun Yu, Yuanchun Shi
+    Zhoutong Ye, Mingze Sun, Huan-ang Gao, Xutong Wang, Xiangyang Wang, Yu Mei
+</div>
+
+<div align="center">
+    Chang Liu, Qinwei Li, Chengwen Zhang, Qinghuan Lan, Chun Yu, Yuanchun Shi
 </div>
 
 <div align="center">
